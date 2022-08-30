@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutterclonevue/widgets/login.dart';
 
 void main() {
-  runApp(const MaterialApp(home:MyApp(),debugShowCheckedModeBanner: false,));
+  runApp(const MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class MyApp extends StatefulWidget {

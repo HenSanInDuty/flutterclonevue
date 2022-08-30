@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutterclonevue/api/api_service.dart';
-import 'register.dart';
 
-class LoginWidget extends StatefulWidget {
-  const LoginWidget({Key? key}) : super(key: key);
+class RegisterWidget extends StatefulWidget {
+  const RegisterWidget({Key? key}) : super(key: key);
+
   @override
-  State<LoginWidget> createState() => _LoginWidgetState();
+  State<RegisterWidget> createState() => _RegisterWidgetState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
-  bool loginBtn = false;
-  @override
-  void initState() {
-    setState(() {
-      loginBtn = false;
-    });
-  }
-
+class _RegisterWidgetState extends State<RegisterWidget> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -24,9 +16,13 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     TextEditingController username = TextEditingController();
     TextEditingController password = TextEditingController();
+    TextEditingController firstname = TextEditingController();
+    TextEditingController lastname = TextEditingController();
+    TextEditingController email = TextEditingController();
     var data = {};
     var api = ApiService();
-    return Padding(
+    return Scaffold(
+        body: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -34,11 +30,23 @@ class _LoginWidgetState extends State<LoginWidget> {
             height: height / 10,
           ),
           const Center(
-              child: Text("LOGIN",
+              child: Text("REGISTER",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ))),
+          TextFormField(
+            decoration: const InputDecoration(hintText: "Enter firstname"),
+            controller: firstname,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(hintText: "Enter lastname"),
+            controller: lastname,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(hintText: "Enter email"),
+            controller: email,
+          ),
           TextFormField(
             decoration: const InputDecoration(hintText: "Enter username"),
             controller: username,
@@ -61,35 +69,22 @@ class _LoginWidgetState extends State<LoginWidget> {
                   onPressed: () async {
                     data['username'] = username.text;
                     data['password'] = password.text;
-                    setState(() {
-                      loginBtn = true;
-                    });
-                    //var loginOk = await api.login(data);
+                    var loginOk = await api.login(data);
                   },
-                  child: !loginBtn
-                      ? const Text('Login')
-                      : const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: CircularProgressIndicator(
-                            color: Colors.amber,
-                          ),
-                        )),
+                  child: const Text('Register')),
               const SizedBox(
                 width: 20,
               ),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterWidget()));
+                  Navigator.pop(context);
                 },
-                child: Text("Register"),
+                child: Text("Back"),
               )
             ],
           ),
         ],
       ),
-    );
+    ));
   }
 }
