@@ -6,6 +6,23 @@ import 'package:flutterclonevue/models/student.dart';
 
 class ApiService{
 
+  Future<bool> register(data) async{
+    try{
+      var url = Uri.parse("http://10.32.61.5:8000/register");
+      var response = await http.post(url,
+      body:jsonEncode(data),
+      headers:<String,String> {
+        'Content-Type':'application/json; charset=UTF-8'
+      });
+      if (response.statusCode == 200){
+        return true;
+      }
+    } catch(e){
+      log(e.toString());
+    }
+    return false;
+  }
+
   Future<bool> login(data) async{
     try{
       var url = Uri.parse("http://10.32.61.5:8000/login");
@@ -23,16 +40,36 @@ class ApiService{
     return false;
   }
 
+  Future<bool> checkLogin() async{
+    try{
+      var url = Uri.parse("http://10.32.61.5:8000/is-login");
+      var response = await http.get(url);
+      if (response.statusCode == 200){
+        return true;
+      }
+    } catch(e){
+      log(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> logout() async{
+      var url = Uri.parse("http://10.32.61.5:8000/logout");
+      await http.get(url);
+      return true;
+  }
+
   Future<List<Student>?> getAllStudent() async {
     try{
        var url = Uri.parse("http://10.32.61.5:8000/studentlist");
        var response = await http.get(url);
+       print(response.headers);
        if (response.statusCode == 200){
         List<Student> studentList = studentFromJson(response.body);
         return studentList;
-       }
+       } 
     } catch(e) {
-      log(e.toString());
+      print(e);
     }
     return null;
   }
