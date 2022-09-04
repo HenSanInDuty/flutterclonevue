@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.clonevue.entities.Students;
 import com.clonevue.entities.Users;
@@ -26,6 +29,7 @@ import com.clonevue.repositories.UsersRepository;
 import com.clonevue.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/")
 public class MainController {
 	@Autowired
@@ -64,15 +68,16 @@ public class MainController {
 	
 	@PatchMapping("/assignteam")
 	ResponseEntity<String> updateTeam(@RequestBody Map<String,String> data){
-		Optional<String> nameValid = Optional.of(data.get("name"));
+		Optional<String> nameValid = Optional.of(data.get("id"));
 		Optional<String> teamValid = Optional.of(data.get("team"));
 		List<String> teams = new ArrayList<String>();
 		teams.add("Team 1");
 		teams.add("Team 2");
 		teams.add("Team 3");
 		teams.add("Team 4");
+		System.out.println(nameValid.get() + " " + teamValid.get());
 		if (nameValid.isPresent() && teamValid.isPresent() && teams.indexOf(teamValid.get())!=-1) {
-			Optional<Students> student = studentsRepository.findByName(nameValid.get());
+			Optional<Students> student = studentsRepository.findById(Integer.parseInt(nameValid.get()));
 			if (student.isPresent()) {
 				student.get().setTeams(teamValid.get());
 				studentsRepository.save(student.get());
@@ -109,5 +114,5 @@ public class MainController {
 		 }
 	        
 	 }
-
+	 
 }

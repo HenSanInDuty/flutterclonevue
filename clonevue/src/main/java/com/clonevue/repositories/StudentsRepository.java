@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.clonevue.entities.Students;
 
 public interface StudentsRepository extends JpaRepository<Students,Integer>{
-	Optional<Students> findByName(String name);
+	 Optional<Students> findByName(String name);
 }

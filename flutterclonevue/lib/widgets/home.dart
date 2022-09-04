@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutterclonevue/api/api_service.dart';
+import 'package:flutterclonevue/provider/task_provider.dart';
+import 'package:flutterclonevue/widgets/add_student.dart';
+import 'package:flutterclonevue/widgets/add_task.dart';
+import 'package:flutterclonevue/widgets/list_remove_student.dart';
 import 'package:flutterclonevue/widgets/list_student.dart';
+import 'package:flutterclonevue/widgets/reassign_student.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -15,15 +21,26 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-
+  var api;
   var routes = "";
+  var title = "";
 
-  Widget bodyWidget() {
+  //Change view
+  Widget bodyWidget(provider) {
     switch (routes) {
       case "List_Student":
-        return ListStudent();
+        return ListRemoveStudent();
+      case "Add_Student":
+        return AddStudent();
+      case "Reassign_Team":
+        return ReassignStudent();
+      case "Add_Task":
+        return AddTask();
       default:
+        //Calender
         return SfCalendar(
+          dataSource: provider.getDataSource(),
+          monthViewSettings: const MonthViewSettings(showAgenda: true),
           allowedViews: const [
             CalendarView.day,
             CalendarView.week,
@@ -36,23 +53,25 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
     routes = "Calender";
+    title = "Calender";
+    api = ApiService();
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return Consumer<LoginProvider>(
-      builder: (_, loginProvider, __) {
+    return Consumer2<LoginProvider, TaskProvider>(
+      builder: (_, loginProvider, taskProvider, __) {
         return Scaffold(
             key: _key,
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.menu),
-                onPressed: () {
+                onPressed: () async {
                   _key.currentState!.openDrawer();
                 },
               ),
-              title: Text("Calender"),
+              title: Text(loginProvider.title),
             ),
             drawer: Drawer(
               width: width / 2,
@@ -76,6 +95,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                       ),
                       btnDrawer("Calender", Icon(Icons.calendar_month), () {
                         changeView("Calender");
+                        loginProvider.changeTitle("Calender");
+                      }),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      btnDrawer("Add Task", Icon(Icons.add_task_rounded), () {
+                        changeView("Add_Task");
+                        loginProvider.changeTitle("Add Task");
                       }),
                       const SizedBox(
                         height: 16,
@@ -93,6 +120,21 @@ class _HomeWidgetState extends State<HomeWidget> {
                       ),
                       btnDrawer("List Student", Icon(Icons.person), () {
                         changeView("List_Student");
+                        loginProvider.changeTitle("List Student");
+                      }),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      btnDrawer("Add Student", Icon(Icons.person_add), () {
+                        changeView("Add_Student");
+                        loginProvider.changeTitle("Add Student");
+                      }),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      btnDrawer("Reassign Team", Icon(Icons.person_off), () {
+                        changeView("Reassign_Team");
+                        loginProvider.changeTitle("Reassign Student Team");
                       }),
                       const SizedBox(
                         height: 16,
@@ -114,7 +156,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     ]),
               ),
             ),
-            body: bodyWidget());
+            body: bodyWidget(taskProvider));
       },
     );
   }
@@ -132,7 +174,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     ;
   }
 
-  void changeView(view){
+  void changeView(view) {
     setState(() {
       routes = view;
     });
@@ -140,7 +182,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   void loginHandle(loginProvider) async {
-    var api = ApiService();
     await api.logout();
     loginProvider.changeHomePathToLogin();
     Navigator.pushNamed(context, '/');

@@ -27,89 +27,85 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     var api = ApiService();
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: height / 10,
-            ),
-            const Center(
-                child: Text("REGISTER",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ))),
-            TextFormField(
-              decoration: const InputDecoration(hintText: "Enter firstname"),
-              controller: firstnameReg,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(hintText: "Enter lastname"),
-              controller: lastnameReg,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(hintText: "Enter username"),
-              controller: usernameReg,
-            ),
-            TextFormField(
-              obscureText: true,
-              autocorrect: false,
-              enableSuggestions: false,
-              decoration: const InputDecoration(
-                hintText: "Enter password",
-              ),
-              controller: passwordReg,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                ElevatedButton(
-                    onPressed: () async {
-                      data['username'] = usernameReg.text;
-                      data['password'] = passwordReg.text;
-                      data['firstName'] = firstnameReg.text;
-                      data['lastName'] = lastnameReg.text;
-                      var registerOk = await api.register(data);
-                      print(registerOk);
-                      if (registerOk) {
-                        Navigator.pop(context);
-                      } else {
-                          _isShow = true;
-                          textDialog = "Dang ky that bai";
-                        setState(() {
-
-                        });
-                      }
-                    },
-                    child: const Text('Register')),
-                const SizedBox(
-                  width: 20,
+                SizedBox(
+                  height: height / 10,
                 ),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Back"),
-                )
+                const Center(
+                    child: Text("REGISTER",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ))),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(hintText: "Enter firstname"),
+                  controller: firstnameReg,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(hintText: "Enter lastname"),
+                  controller: lastnameReg,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(hintText: "Enter username"),
+                  controller: usernameReg,
+                ),
+                TextFormField(
+                  obscureText: true,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  decoration: const InputDecoration(
+                    hintText: "Enter password",
+                  ),
+                  controller: passwordReg,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          data['username'] = usernameReg.text;
+                          data['password'] = passwordReg.text;
+                          data['firstName'] = firstnameReg.text;
+                          data['lastName'] = lastnameReg.text;
+                          var registerOk = await api.register(data);
+                          print(registerOk);
+                          if (registerOk) {
+                            Navigator.pop(context);
+                          } else {
+                            _isShow = true;
+                            textDialog = "Dang ky that bai";
+                            setState(() {});
+                          }
+                        },
+                        child: const Text('Register')),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Back"),
+                    )
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-    bottomSheet: _showBottomSheet(textDialog));
+        bottomSheet: _showBottomSheet(textDialog));
   }
 
-  Widget? _showBottomSheet(text)
-  {
-    if (_isShow){
+  Widget? _showBottomSheet(text) {
+    if (_isShow) {
       return BottomSheet(
-        onClosing: () {
- 
-        },
+        onClosing: () {},
         builder: (context) {
           return Container(
             height: 100,
@@ -118,13 +114,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Column(
               children: [
                 Text(text),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 ElevatedButton(
                   onPressed: () {
                     _isShow = false;
-                    setState(() {
-                      
-                    });
+                    setState(() {});
                   },
                   child: const Text("Close"),
                 ),
@@ -136,7 +132,5 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     } else {
       return null;
     }
-      
   }
-
 }
