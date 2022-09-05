@@ -15,7 +15,9 @@ class _ListStudentState extends State<ListStudent> {
 
   @override
   Widget build(BuildContext context) {
-    getAllStudent();
+    if (mounted){
+      getAllStudent();
+    };
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
