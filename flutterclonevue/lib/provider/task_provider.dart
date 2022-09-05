@@ -36,6 +36,13 @@ class TaskProvider extends CalendarDataSource {
     return TaskProvider(task);
   }
 
+  void deleteDataSource(Appointment appointment){
+    task.remove(appointment);
+  }
+
+  void deleteAll(){
+    task = [];
+  }
   // Future<String> get _localPath async {
   //   final directory = await getApplicationDocumentsDirectory();
   //   return directory.path;

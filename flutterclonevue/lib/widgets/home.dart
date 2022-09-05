@@ -171,7 +171,6 @@ class _HomeWidgetState extends State<HomeWidget> {
           icon: icon,
           style: OutlinedButton.styleFrom(alignment: Alignment.centerLeft)),
     );
-    ;
   }
 
   void changeView(view) {

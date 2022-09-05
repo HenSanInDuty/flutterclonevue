@@ -6,7 +6,7 @@ import 'package:flutterclonevue/api/constant.dart';
 import 'package:flutterclonevue/models/student.dart';
 
 class ApiService extends ChangeNotifier {
-  final String baseUrl = "http://192.168.1.87:8000";
+  final String baseUrl = "http://10.32.61.5:8000";
 
   static Map<String, String> header = {
     'Content-Type': 'application/json',
@@ -91,6 +91,22 @@ class ApiService extends ChangeNotifier {
       var url = Uri.parse("$baseUrl/addstudent");
       var response =
           await http.post(url, headers: header, body: jsonEncode(data));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> deleteStudent(id) async {
+    try {
+      var url = Uri.parse("$baseUrl/deletestudent/$id");
+      var response =
+          await http.delete(url, headers: header);
       if (response.statusCode == 200) {
         return true;
       } else {

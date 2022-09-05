@@ -12,15 +12,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.clonevue.entities.Students;
 import com.clonevue.entities.Users;
@@ -62,6 +62,22 @@ public class MainController {
 			}
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("Them that bai");
+		}
+		
+	}
+	
+	@DeleteMapping("/deletestudent/{id}")
+	ResponseEntity<String> deleteStudent(@PathVariable(name="id") int id){
+		try{
+			Optional<Students> findedStudent = studentsRepository.findById(id);
+			if(findedStudent.isPresent()) {
+				studentsRepository.delete(findedStudent.get());
+				return ResponseEntity.ok("Xoa thanh cong");
+			} else {
+				return ResponseEntity.badRequest().body("Xoa that bai");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Xoa that bai");
 		}
 		
 	}
